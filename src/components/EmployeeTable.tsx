@@ -40,6 +40,10 @@ const EmployeeTable = () => {
         return 0; // fallback if mixed types
     };
 
+    // GetEmployees became allEmployees variable, because
+    // React recreates function object everytime it's rendered
+    // We need to use memo to save the results of this function
+    // depending on the variables visible at the useMemo function.
     const allEmployees = useMemo(() => {
         let displayedEmployees =
             sortKey === null ?
