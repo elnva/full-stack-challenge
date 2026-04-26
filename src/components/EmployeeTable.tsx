@@ -1,12 +1,14 @@
-import { useState, useMemo } from "react";
-import employees from "../../data/employees.json";
-import type { Employee } from "../types/Employee";
+import {useState, useMemo} from "react";
+import type {Employee} from "../types/Employee";
+import {useQuery} from "@apollo/client/react";
+import {EmployeesQuery} from "../graphql/queries.ts";
 
 type SortKey = "id" | "name" | "role" | "status" | null;
 type SortOrder = "asc" | "desc";
 type StatusFilter = "ALL" | "ACTIVE" | "INACTIVE" | "SUSPENDED";
 
 const EmployeeTable = () => {
+    const {data, loading, error} = useQuery<{ employees: Employee[] }>(EmployeesQuery);
     const [sortKey, setSortKey] = useState<SortKey>(null)
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
@@ -45,10 +47,11 @@ const EmployeeTable = () => {
     // We need to use memo to save the results of this function
     // depending on the variables visible at the useMemo function.
     const allEmployees = useMemo(() => {
-        let displayedEmployees =
-            sortKey === null ?
-                [...employees] :
-                [...employees].sort((a, b) => compareHelper(a[sortKey], b[sortKey], sortOrder == "asc"))
+
+        const rows = data?.employees ?? [];
+        let displayedEmployees = sortKey === null
+            ? rows
+            : [...rows].sort((a, b) => compareHelper(a[sortKey], b[sortKey], sortOrder === "asc"));
 
         if (statusFilter !== "ALL") {
             displayedEmployees = displayedEmployees.filter(a => a.status === statusFilter);
@@ -61,7 +64,10 @@ const EmployeeTable = () => {
                 <td>{emp.status}</td>
             </tr>
         ));
-    }, [statusFilter, sortKey, sortOrder]);
+    }, [data?.employees, sortKey, sortOrder, statusFilter]);
+
+    if (loading) return <p>Loading…</p>;
+    if (error) return <p>Error: {error.message}</p>;
 
     return (
         <>

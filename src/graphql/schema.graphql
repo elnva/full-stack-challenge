@@ -1,44 +1,42 @@
-export const typeDefs = `
-    # An employee in the system
-    # GraphQL object types are like "shapes" of data.
-    type Employee {
-        # Unique identifier for the employee.
-        # ID! means:
-        # - ID: a special GraphQL type for identifiers
-        # - !: required, so it cannot be null
-        id: ID!
-        
-        # The employee's job role, like "Developer" or "Designer".
-        # String! means this field is required text.
-        role: String!
-        
-        # The employee's full name.
-        # Also required text.
-        name: String!
-        
-        # The employee's current status.
-        # This uses the Status enum below, so it can only be one of the allowed values.     
-        status: Status!
-    }
-    
-    # An enum is a list of allowed values.
-    # Using an enum helps prevent invalid values from being used.
-    # Allowed employee statuses
-    # Enum values are always uppercase.
-    enum Status {
-        ACTIVE
-        INACTIVE
-        SUSPENDED
-    }
-    
-    # The root Query type defines read operations.
-    # Clients start by asking for fields on Query.
-    type Query {
-        # Returns the full list of employees.
-        # [Employee!]! means:
-        # - []: a list
-        # - Employee!: each item in the list must be a valid Employee, not null
-        # - ! after the list: the list itself cannot be null
-        employees: [Employee!]!
-    }
-`;
+# An employee in the system
+# GraphQL object types are like "shapes" of data.
+type Employee {
+    # Unique identifier for the employee.
+    # ID! means:
+    # - ID: a special GraphQL type for identifiers
+    # - !: required, so it cannot be null
+    id: ID!
+
+    # The employee's job role, like "Developer" or "Designer".
+    # String! means this field is required text.
+    role: String!
+
+    # The employee's full name.
+    # Also required text.
+    name: String!
+
+    # The employee's current status.
+    # This uses the Status enum below, so it can only be one of the allowed values.
+    status: Status!
+}
+
+# An enum is a list of allowed values.
+# Using an enum helps prevent invalid values from being used.
+# Allowed employee statuses
+# Enum values are always uppercase.
+enum Status {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+}
+
+# The root Query type defines read operations.
+# Clients start by asking for fields on Query.
+type Query {
+    # Returns the full list of employees.
+    # [Employee!]! means:
+    # - []: a list
+    # - Employee!: each item in the list must be a valid Employee, not null
+    # - ! after the list: the list itself cannot be null
+    employees: [Employee!]!
+}
